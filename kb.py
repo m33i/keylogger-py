@@ -16,7 +16,7 @@ EMAIL_PASSWORD = "pass"
 
 # Create Socket and Connect to Host
 host = socket.gethostname()
-port = 1227
+port = 1337
 s = socket.socket()
 s.connect((host,port))
 
