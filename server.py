@@ -6,6 +6,7 @@ s = socket.socket()
 s.bind((host,port))
 s.listen(5)
 
+print("Waiting for client...")
 conn,addr = s.accept()
 print("Connected by " + addr[0])
 
